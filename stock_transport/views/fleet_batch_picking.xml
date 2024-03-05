@@ -13,8 +13,8 @@
                     <field name='dock_id'/>
                     <field name='fleet_vehicle_id'/>
                     <field name='fleet_category_id'/>
-                    <field name='weight' widget='progressbar' invisible='not fleet_category_id'/>
-                    <field name='volume' invisible='not fleet_category_id'/>
+                    <field name='total_weight' widget='progressbar' invisible='not fleet_category_id'/>
+                    <field name='total_volume' widget='progressbar' invisible='not fleet_category_id'/>
                 </xpath>
                 <!-- <xpath expr="//field[@name='allowed_picking_ids']" position='inside'>
                     <field name='volume'/>
@@ -57,21 +57,40 @@
             <field name="name">stock.picking.batch.view.graph</field>
             <field name="model">stock.picking.batch</field>
             <field name="arch" type="xml">
-                <gantt date_start="create_date" date_stop="scheduled_date" 
-                decoration-success="state == 'done'"
-                decoration-danger="state == 'drft'"
-                default_scale='week'
-                default_group_by='fleet_vehicle_id'
+                <gantt date_start="create_date" 
+                date_stop="scheduled_date" 
+                decoration-success="state == 'done'" 
+                decoration-danger="state == 'drft'" 
+                default_scale='week' 
+                string='schedule_date'
+
+                default_group_by='fleet_vehicle_id,dock_id'
                 >
-                <!-- <field name='scheduled_date'/> -->
                 <field name='create_date'/>
                 <field name='fleet_vehicle_id'/>
                 <field name='driver_avatar' widget='image'/>
                 <field name='state'/>
-            
-                </gantt>
-            </field>
-        </record>
+                <field name='scheduled_date'/>
+                <templates>
+                    <div id="allocated_data">
+                        <div id="scheduled_date_id">
+                            <strong>Sceduled Date — </strong>
+                            <t t-esc="schedule03/10/2024 23:59:59d_date"/>
+                        </div>
+                        <div>
+                            <t t-esc="create_date.toFormat('f ')"/>
+                            <t t-esc="scheduled_date.toFormat(' f')"/>
+                        </div>
+                        <field string="" name="driver_avatar" widget="image" class="oe_avatar"/>
+                    </div>
+                </templates>
 
-    </data>
+            </gantt>
+        </field>
+    </record>
+
+    
+
+
+</data>
 </odoo>

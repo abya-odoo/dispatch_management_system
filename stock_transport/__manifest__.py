@@ -14,7 +14,8 @@
         # 'data/res.country.state.csv',
         'security/ir.model.access.csv',
         'views/fleet_model_view.xml',
-        'views/fleet_batch_picking.xml'
+        'views/fleet_batch_picking.xml',
+        'views/fleet_stock_picking.xml'
         
     ],
     # data files containing optionally loaded demonstration data
