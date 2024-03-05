@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+
+        <record id="fleet_batch_picking_model_view_form" model="ir.ui.view">
+            <field name="name">fleet.model.view.inherit</field>
+            <field name="model">stock.picking.batch</field>
+            <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='scheduled_date']" position="after">
+
+                    <field name='dock_id'/>
+                    <field name='fleet_vehicle_id'/>
+                    <field name='fleet_category_id'/>
+                    <field name='weight' widget='progressbar' invisible='not fleet_category_id'/>
+                    <field name='volume' invisible='not fleet_category_id'/>
+                </xpath>
+                <!-- <xpath expr="//field[@name='allowed_picking_ids']" position='inside'>
+                    <field name='volume'/>
+                </xpath> -->
+            </field>
+        </record>
+
+        <!-- override the function  -->
+        <record id="stock_picking_batch.stock_picking_batch_action" model="ir.actions.act_window">
+            <field name="name">Batch Transfers</field>
+            <field name="res_model">stock.picking.batch</field>
+            <field name="view_mode">tree,kanban,form,graph,gantt</field>
+            <field name="domain">[('is_wave', '=', False)]</field>
+            <field name="context">{'search_default_draft': True, 'search_default_in_progress': True}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+            Create a new batch transfer
+                </p>
+                <p>
+            The goal of the batch transfer is to group operations that may
+            (needs to) be done together in order to increase their efficiency.
+            It may also be useful to assign jobs (one person = one batch) or
+            help the timing management of operations (tasks to be done at 1pm).
+                </p>
+            </field>
+        </record>
+
+        <record id="stock_batch_graph_view_graph" model="ir.ui.view">
+            <field name="name">stock.picking.batch.view.graph</field>
+            <field name="model">stock.picking.batch</field>
+            <field name="arch" type="xml">
+                <graph type="line" sample="1">
+                    <field name="scheduled_date"/>
+                    <field name="fleet_category_id"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="fleet_batch_model_view_gantt" model="ir.ui.view">
+            <field name="name">stock.picking.batch.view.graph</field>
+            <field name="model">stock.picking.batch</field>
+            <field name="arch" type="xml">
+                <gantt date_start="create_date" date_stop="scheduled_date" 
+                decoration-success="state == 'done'"
+                decoration-danger="state == 'drft'"
+                default_scale='week'
+                default_group_by='fleet_vehicle_id'
+                >
+                <!-- <field name='scheduled_date'/> -->
+                <field name='create_date'/>
+                <field name='fleet_vehicle_id'/>
+                <field name='driver_avatar' widget='image'/>
+                <field name='state'/>
+            
+                </gantt>
+            </field>
+        </record>
+
+    </data>
+</odoo>
