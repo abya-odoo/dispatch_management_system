@@ -11,10 +11,20 @@
                 <xpath expr="//field[@name='scheduled_date']" position="after">
 
                     <field name='dock_id'/>
-                    <field name='fleet_vehicle_id'/>
-                    <field name='fleet_category_id'/>
-                    <field name='total_weight' widget='progressbar' invisible='not fleet_category_id'/>
-                    <field name='total_volume' widget='progressbar' invisible='not fleet_category_id'/>
+                    <field name='fleet_vehicle_id' placeholder='Fleet Vehicle'/>
+                    <field name='fleet_category_id' placeholder='Fleet Category'/>
+                    <field name='driver_image' widget='image' class='oe_avatar'/>
+                    <!-- <field name='driver_id' /> -->
+                    <label for='total_weight' string="Weight (kg)"/>
+                    <div class="o_row">
+                        <field name='total_weight' />
+                        <field name='total_weight_percentage' class="oe_inline" widget='progressbar' />
+                    </div>
+                    <label for='total_volume' string="Volume (m³)"/>
+                    <div class="o_row">
+                        <field name='total_volume'/>
+                        <field name='total_volume_percentage' class='oe_inline' widget='progressbar'/>
+                    </div>
                 </xpath>
                 <!-- <xpath expr="//field[@name='allowed_picking_ids']" position='inside'>
                     <field name='volume'/>
@@ -47,49 +57,39 @@
             <field name="model">stock.picking.batch</field>
             <field name="arch" type="xml">
                 <graph type="line" sample="1">
-                    <field name="scheduled_date"/>
+                    <field name='total_volume' type='measure'/>
+                    <field name='total_weight' type='measure'/>
+                    <field name='transfer' type='measure' />
+                    <field name='lines' type='measure'/>
+                    <field name="scheduled_date" interval="day"/>
                     <field name="fleet_category_id"/>
+                    <field name='total_weight'/>
                 </graph>
             </field>
         </record>
 
         <record id="fleet_batch_model_view_gantt" model="ir.ui.view">
-            <field name="name">stock.picking.batch.view.graph</field>
+            <field name="name">stock.picking.batch.view.gantt</field>
             <field name="model">stock.picking.batch</field>
             <field name="arch" type="xml">
-                <gantt date_start="create_date" 
-                date_stop="scheduled_date" 
-                decoration-success="state == 'done'" 
-                decoration-danger="state == 'drft'" 
-                default_scale='week' 
-                string='schedule_date'
-
-                default_group_by='fleet_vehicle_id,dock_id'
+                <gantt js_class="stock_transport_gantt" date_start="create_date" date_stop="scheduled_date" decoration-info="state in ['draft', 'done']" default_scale='week' string='Open Shifts' pill_label="True" color="dock_id" thumbnails="{'fleet_vehicle_id':'avatar_128'}" default_group_by='fleet_vehicle_id,dock_id'
                 >
-                <field name='create_date'/>
+<field name='create_date'/>
                 <field name='fleet_vehicle_id'/>
-                <field name='driver_avatar' widget='image'/>
+                <field name='driver_image'/>
                 <field name='state'/>
                 <field name='scheduled_date'/>
+                <field name='total_volume'/>
+                <field name='total_weight'/>
+                <!-- <field name='avatar_128'/> -->
                 <templates>
-                    <div id="allocated_data">
-                        <div id="scheduled_date_id">
-                            <strong>Sceduled Date — </strong>
-                            <t t-esc="schedule03/10/2024 23:59:59d_date"/>
-                        </div>
-                        <div>
-                            <t t-esc="create_date.toFormat('f ')"/>
-                            <t t-esc="scheduled_date.toFormat(' f')"/>
-                        </div>
-                        <field string="" name="driver_avatar" widget="image" class="oe_avatar"/>
-                    </div>
+                    <span class="o_gantt_pill_title bg-view text-truncate px-1 z-index-1" t-esc="total_weight" />
                 </templates>
-
             </gantt>
         </field>
     </record>
 
-    
+
 
 
 </data>

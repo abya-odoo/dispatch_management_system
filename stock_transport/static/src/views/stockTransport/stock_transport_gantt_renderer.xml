@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- <t t-name="planning.PlanningGanttRenderer.RowHeader" t-inherit="webgantt.GanttRenderer.RowHeader">
+        <xpath expr="//t[@t-esc='row.name']" position="replace">
+            <t t-if="row.progressBar and row.progressBar.is_material_resource">
+                <div t-attf-class="o_colorlist_item_color{{ row.progressBar.resourcecolor }} o_material_resource d-inline-flex flex-shrink-0 align-items-center justify-content-center me-1 rounded bg-200">
+                    <i class="fa fa-wrench"/>
+                </div>
+            </t>
+            <Avatar t-if="hasAvatar(row)" t-props="getAvatarProps(row)"/>
+            <t t-else="" t-esc="row.name"/>
+        </xpath>
+    </t> -->
+
+    <t t-name="stock_transport.PlanningGanttRenderer.Pill" t-inherit="web_gantt.GanttRenderer.Pill">
+        <xpath expr="//div[hasclass('o_gantt_pill')]" position="inside">
+            <!-- <t t-if="isPlanningManager and !model.useSampleModel"> -->
+            <!-- <t t-foreach="[...Array(pill.grid.column[1] - 1).keys()]" t-as="i" t-key="i"> -->
+            <!-- <t t-set="split_tool_grid" t-value="{ column: [pill.grid.column[0] + i + 1, 1], row: pill.grid.row}"/> -->
+            <!-- <div class="o_gantt_pill_split_tool" t-att-style="getGridPosition(split_tool_grid)" t-att-data-split-tool-pill-id="pill.id + '' + i" t-on-click="(ev) => this.onPillSplitToolClicked(ev, pill, i)" t-if="!env.isSmall">
+                        <div class="o_slot_dashed_cut_line"/>
+                        <i class="fa fa-lg fa-scissors fa-rotate-270"/>
+                    </div> -->
+            <!-- </t> -->
+            <!-- </t> -->
+            <!-- <div class="o_avatar d-flex align-items-center">
+                <img t-attf-class="rounded {{props.noSpacing ? '' : 'me-2'}}" t-attf-src="/web/image/{{props.resModel}}/{{props.resId}}/driver_image" t-on-click.stop.prevent="onClickAvatar" />
+            </div> -->
+            <!-- <span t-if="props.displayName" class="text-truncate w-0 flex-grow-1" t-esc="props.displayName"/> -->
+            <span >
+            <span class="o_gantt_pill_title text-truncate mx-1" t-esc="pill.record.total_weight"/>Kg, 
+            <span class="o_gantt_pill_title text-truncate mx-1" t-esc="pill.record.total_volume"/>m, 
+            </span>
+            <t t-if="pill.record.driver_image">
+                <img t-att-src="'data:image/png;base64,' + pill.record.driver_image" class="img-thumbnail" alt="Property Image" style="max-width: 50px" />
+            </t>
+            <!-- <span class="o_gantt_pill_title text-truncate mx-1" t-esc="pill.record.total_weight">
+            </span> -->
+            <!-- </div> -->
+        </xpath>
+    </t>
+
+</templates>
